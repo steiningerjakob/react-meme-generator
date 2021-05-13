@@ -7,6 +7,7 @@ import UserInputs from './UserInputs.js';
 const imageStyle = css`
   max-width: 300px;
   max-height: auto;
+  margin: 20px;
 `;
 
 const buttonStyle = css`
@@ -43,7 +44,9 @@ function App() {
       />
       <img src={stringOutput} alt="meme" css={imageStyle} />
       <br />
-      <button css={buttonStyle}>Download meme [coming soon]</button>
+      <a href={stringOutput} download="myMeme.png">
+        Click to download
+      </a>
     </div>
   );
 }
