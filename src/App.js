@@ -10,10 +10,6 @@ const imageStyle = css`
   margin: 20px;
 `;
 
-const buttonStyle = css`
-  margin: 30px;
-`;
-
 function App() {
   const [topText, setTopText] = useState('Launched 1000 memes');
   const [bottomText, setBottomText] = useState('hated every one of them');
