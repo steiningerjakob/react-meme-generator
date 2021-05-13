@@ -11,11 +11,21 @@ const imageStyle = css`
 `;
 
 function App() {
-  const [topText, setTopText] = useState('Launched 1000 memes');
-  const [bottomText, setBottomText] = useState('hated every one of them');
+  const [topTextInput, setTopTextInput] = useState('Launched 1000&1 memes');
+  const [topTextOutput, setTopTextOutput] = useState('Launched 1000&1 memes');
+  const [bottomTextInput, setBottomTextInput] = useState(
+    '#hated every one of them',
+  );
+  const [bottomTextOutput, setBottomTextOutput] = useState(
+    '#hated every one of them',
+  );
   const [image, setImage] = useState('grumpycat');
-  const stringInput = `https://api.memegen.link/images/${image}/${topText}/${bottomText}.png`;
-  const stringOutput = stringInput.replace(/ /g, '_');
+  const stringInput = `https://api.memegen.link/images/${image}/${topTextOutput}/${bottomTextOutput}.png`;
+  const stringOutput = stringInput
+    .replace(/ /g, '_')
+    .replace(/[#]/g, '~h')
+    .replace(/&/g, '~a');
+
   return (
     <div
       style={{
@@ -31,16 +41,21 @@ function App() {
 
       {/* Collect user inputs */}
       <UserInputs
-        topText={topText}
-        setTopText={setTopText}
-        bottomText={bottomText}
-        setBottomText={setBottomText}
+        topTextInput={topTextInput}
+        setTopTextInput={setTopTextInput}
+        topTextOutput={topTextOutput}
+        setTopTextOutput={setTopTextOutput}
+        bottomTextInput={bottomTextInput}
+        setBottomTextInput={setBottomTextInput}
+        bottomTextOutput={bottomTextOutput}
+        setBottomTextOutput={setBottomTextOutput}
         image={image}
         setImage={setImage}
       />
       <img src={stringOutput} alt="meme" css={imageStyle} />
       <br />
-      <a href={stringOutput} download="myMeme.png">
+      {/* download functionality currently not working */}
+      <a href="{stringOutput}" download="myMeme.jpeg">
         Click to download
       </a>
     </div>

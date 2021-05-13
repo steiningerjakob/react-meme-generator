@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import { useEffect } from 'react';
 
 // Style element via CSS-in-JS
 const sectionStyles = css`
@@ -21,13 +22,33 @@ const inputStyles = css`
 // Capture user input on top & bottom text and image, and change variable state accordingly
 // Pass state to other components via destructured props
 function UserInputs({
-  topText,
-  setTopText,
-  bottomText,
-  setBottomText,
+  topTextInput,
+  setTopTextInput,
+  topTextOutput,
+  setTopTextOutput,
+  bottomTextInput,
+  setBottomTextInput,
+  bottomTextOutput,
+  setBottomTextOutput,
   image,
   setImage,
 }) {
+  // function to delay processing of user input --> Question: variables are called in App.js files, is that ok?
+  useEffect(() => {
+    const timeOutTopText = setTimeout(
+      () => setTopTextOutput(topTextInput),
+      1500,
+    );
+    return () => clearTimeout(timeOutTopText);
+  });
+  useEffect(() => {
+    const timeOutBottomText = setTimeout(
+      () => setBottomTextOutput(bottomTextInput),
+      1500,
+    );
+    return () => clearTimeout(timeOutBottomText);
+  });
+
   return (
     <div>
       <section css={sectionStyles}>
@@ -37,9 +58,9 @@ function UserInputs({
           <input
             id="top"
             placeholder="Launched 1000 memes"
-            value={topText}
+            value={topTextInput}
             onChange={(event) => {
-              setTopText(event.currentTarget.value);
+              setTopTextInput(event.currentTarget.value);
             }}
             css={inputStyles}
           />
@@ -51,9 +72,9 @@ function UserInputs({
           <input
             id="bottom"
             placeholder="hated every one of them"
-            value={bottomText}
+            value={bottomTextInput}
             onChange={(event) => {
-              setBottomText(event.currentTarget.value);
+              setBottomTextInput(event.currentTarget.value);
             }}
             css={inputStyles}
           />
