@@ -11,20 +11,32 @@ const imageStyle = css`
 `;
 
 function App() {
-  const [topTextInput, setTopTextInput] = useState('Launched 1000&1 memes');
-  const [topTextOutput, setTopTextOutput] = useState('Launched 1000&1 memes');
-  const [bottomTextInput, setBottomTextInput] = useState(
+  const [topTextInput, setTopTextInput] = useState(['Launched 1000&1 memes']);
+  const [topTextOutput, setTopTextOutput] = useState(['Launched 1000&1 memes']);
+  const [bottomTextInput, setBottomTextInput] = useState([
     '#hated every one of them',
-  );
-  const [bottomTextOutput, setBottomTextOutput] = useState(
+  ]);
+  const [bottomTextOutput, setBottomTextOutput] = useState([
     '#hated every one of them',
-  );
-  const [image, setImage] = useState('grumpycat');
-  const stringInput = `https://api.memegen.link/images/${image}/${topTextOutput}/${bottomTextOutput}.png`;
+  ]);
+  const [image, setImage] = useState(['grumpycat']);
+  const [imageOutput, setImageOutput] = useState(['grumpycat']);
+  const stringInput = `https://api.memegen.link/images/${imageOutput}/${topTextOutput}/${bottomTextOutput}.png`;
   const stringOutput = stringInput
     .replace(/ /g, '_')
     .replace(/[#]/g, '~h')
     .replace(/&/g, '~a');
+
+  // download function: not working - jumping directly to image page
+
+  //   function download(url) {
+  //   const a = document.createElement('a');
+  //   a.href = url;
+  //   a.download = url.split('/').pop();
+  //   document.body.appendChild(a);
+  //   a.click();
+  //   document.body.removeChild(a);
+  // }
 
   return (
     <div
@@ -51,13 +63,17 @@ function App() {
         setBottomTextOutput={setBottomTextOutput}
         image={image}
         setImage={setImage}
+        imageOutput={imageOutput}
+        setImageOutput={setImageOutput}
       />
+      {/* Dispyay meme */}
       <img src={stringOutput} alt="meme" css={imageStyle} />
       <br />
       {/* download functionality currently not working */}
       <a href="{stringOutput}" download="myMeme.jpeg">
-        Click to download
+        Click to download (work in progress)
       </a>
+      {/* <button onClick={download(stringOutput)}>Download meme</button> */}
     </div>
   );
 }
