@@ -19,41 +19,42 @@ const inputStyles = css`
   text-align: center;
 `;
 
+// Dropdown for image options - to be refined with entire list
+// via json data fetch
+const dropdownOptions = ['grumpycat', 'doge', 'bender', 'ams', 'cb', 'trump'];
+
 // Capture user input on top & bottom text and image, and change variable state accordingly
 // Pass state to other components via destructured props
 function UserInputs({
   topTextInput,
   setTopTextInput,
-  topTextOutput,
   setTopTextOutput,
   bottomTextInput,
   setBottomTextInput,
-  bottomTextOutput,
   setBottomTextOutput,
-  image,
-  setImage,
-  imageOutput,
+  imageInput,
+  setImageInput,
   setImageOutput,
 }) {
-  // function to delay processing of user input --> Question: variables are called in App.js files, is that ok?
+  // function to delay processing of user input --> Question: variables are read in App.js files, is that ok?
   useEffect(() => {
     const timeOutTopText = setTimeout(
       () => setTopTextOutput(topTextInput),
       1000,
     );
     return () => clearTimeout(timeOutTopText);
-  });
+  }, [setTopTextOutput, topTextInput]);
   useEffect(() => {
     const timeOutBottomText = setTimeout(
       () => setBottomTextOutput(bottomTextInput),
       1000,
     );
     return () => clearTimeout(timeOutBottomText);
-  });
+  }, [setBottomTextOutput, bottomTextInput]);
   useEffect(() => {
-    const timeOutImage = setTimeout(() => setImageOutput(image), 1000);
+    const timeOutImage = setTimeout(() => setImageOutput(imageInput), 1000);
     return () => clearTimeout(timeOutImage);
-  });
+  }, [imageInput, setImageOutput]);
 
   return (
     <div>
@@ -89,15 +90,19 @@ function UserInputs({
         <label htmlFor="image">
           Image:
           <br />
-          <input
+          <select
             id="image"
             placeholder="grumpycat"
-            value={image}
+            value={imageInput}
             onChange={(event) => {
-              setImage(event.currentTarget.value);
+              setImageInput(event.currentTarget.value);
             }}
             css={inputStyles}
-          />
+          >
+            {dropdownOptions.map((item) => {
+              return <option key={item}>{item}</option>;
+            })}
+          </select>
         </label>
       </section>
     </div>

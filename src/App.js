@@ -19,7 +19,7 @@ function App() {
   const [bottomTextOutput, setBottomTextOutput] = useState([
     '#hated every one of them',
   ]);
-  const [image, setImage] = useState(['grumpycat']);
+  const [imageInput, setImageInput] = useState(['grumpycat']);
   const [imageOutput, setImageOutput] = useState(['grumpycat']);
   const stringInput = `https://api.memegen.link/images/${imageOutput}/${topTextOutput}/${bottomTextOutput}.png`;
   const stringOutput = stringInput
@@ -27,16 +27,39 @@ function App() {
     .replace(/[#]/g, '~h')
     .replace(/&/g, '~a');
 
-  // download function: not working - jumping directly to image page
+  // download function currently not working - source:
+  // https://stackoverflow.com/questions/49668363/html5-download-attribute-not-working-when-download-external-pdf-file-on-chrome/60299071#60299071
 
-  //   function download(url) {
-  //   const a = document.createElement('a');
-  //   a.href = url;
-  //   a.download = url.split('/').pop();
-  //   document.body.appendChild(a);
-  //   a.click();
-  //   document.body.removeChild(a);
-  // }
+  function forceDownload(blob, filename) {
+    // Create an invisible anchor element
+    const anchor = document.createElement('a');
+    anchor.style.display = 'none';
+    anchor.href = window.URL.createObjectURL(blob);
+    anchor.setAttribute('download', filename);
+    document.body.appendChild(anchor);
+
+    // Trigger the download by simulating click
+    anchor.click();
+
+    // Clean up
+    window.URL.revokeObjectURL(anchor.href);
+    document.body.removeChild(anchor);
+  }
+
+  function downloadResource(url, filename) {
+    // If no filename is set, use filename from URL
+    if (!filename) filename = url.match(/\/([^/#?]+)[^/]*$/)[1];
+
+    fetch(url, {
+      headers: new Headers({
+        Origin: window.location.origin,
+      }),
+      mode: 'cors',
+    })
+      .then((response) => response.blob())
+      .then((blob) => forceDownload(blob, filename))
+      .catch((e) => console.error(e));
+  }
 
   return (
     <div
@@ -55,25 +78,20 @@ function App() {
       <UserInputs
         topTextInput={topTextInput}
         setTopTextInput={setTopTextInput}
-        topTextOutput={topTextOutput}
         setTopTextOutput={setTopTextOutput}
         bottomTextInput={bottomTextInput}
         setBottomTextInput={setBottomTextInput}
-        bottomTextOutput={bottomTextOutput}
         setBottomTextOutput={setBottomTextOutput}
-        image={image}
-        setImage={setImage}
-        imageOutput={imageOutput}
+        imageInput={imageInput}
+        setImageInput={setImageInput}
         setImageOutput={setImageOutput}
       />
       {/* Dispyay meme */}
       <img src={stringOutput} alt="meme" css={imageStyle} />
       <br />
-      {/* download functionality currently not working */}
-      <a href="{stringOutput}" download="myMeme.jpeg">
-        Click to download (work in progress)
-      </a>
-      {/* <button onClick={download(stringOutput)}>Download meme</button> */}
+      <button onClick={() => downloadResource(stringOutput, 'MyMeme.jpeg')}>
+        Download meme
+      </button>
     </div>
   );
 }
