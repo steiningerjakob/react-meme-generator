@@ -1,9 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { useEffect } from 'react';
 
 // Style element via CSS-in-JS
-const sectionStyles = css`
+const divStyles = css`
   display: flex;
   justify-content: center;
 `;
@@ -19,46 +18,20 @@ const inputStyles = css`
   text-align: center;
 `;
 
-// Dropdown for image options - to be refined with entire list
-// via json data fetch
-const dropdownOptions = ['grumpycat', 'doge', 'bender', 'ams', 'cb', 'trump'];
-
 // Capture user input on top & bottom text and image, and change variable state accordingly
 // Pass state to other components via destructured props
 function UserInputs({
   topTextInput,
   setTopTextInput,
-  setTopTextOutput,
   bottomTextInput,
   setBottomTextInput,
-  setBottomTextOutput,
   imageInput,
   setImageInput,
-  setImageOutput,
+  submitInput,
 }) {
-  // function to delay processing of user input --> Question: variables are read in App.js files, is that ok?
-  useEffect(() => {
-    const timeOutTopText = setTimeout(
-      () => setTopTextOutput(topTextInput),
-      1000,
-    );
-    return () => clearTimeout(timeOutTopText);
-  }, [setTopTextOutput, topTextInput]);
-  useEffect(() => {
-    const timeOutBottomText = setTimeout(
-      () => setBottomTextOutput(bottomTextInput),
-      1000,
-    );
-    return () => clearTimeout(timeOutBottomText);
-  }, [setBottomTextOutput, bottomTextInput]);
-  useEffect(() => {
-    const timeOutImage = setTimeout(() => setImageOutput(imageInput), 1000);
-    return () => clearTimeout(timeOutImage);
-  }, [imageInput, setImageOutput]);
-
   return (
-    <div>
-      <section css={sectionStyles}>
+    <>
+      <div css={divStyles}>
         <label htmlFor="top">
           Top text:
           <br />
@@ -71,6 +44,7 @@ function UserInputs({
             }}
             css={inputStyles}
           />
+          <br />
         </label>
 
         <label htmlFor="bottom">
@@ -90,7 +64,7 @@ function UserInputs({
         <label htmlFor="image">
           Image:
           <br />
-          <select
+          <input
             id="image"
             placeholder="grumpycat"
             value={imageInput}
@@ -98,14 +72,14 @@ function UserInputs({
               setImageInput(event.currentTarget.value);
             }}
             css={inputStyles}
-          >
-            {dropdownOptions.map((item) => {
-              return <option key={item}>{item}</option>;
-            })}
-          </select>
+          />
         </label>
-      </section>
-    </div>
+        <br />
+      </div>
+      <div>
+        <button onClick={submitInput}>Create meme</button>
+      </div>
+    </>
   );
 }
 
