@@ -27,7 +27,9 @@ function App() {
     .replace(/[#]/g, '~h')
     .replace(/&/g, '~a');
 
-  // download function currently not working - source:
+  // const topTextHistory = [null];
+
+  // download function source:
   // https://stackoverflow.com/questions/49668363/html5-download-attribute-not-working-when-download-external-pdf-file-on-chrome/60299071#60299071
 
   function forceDownload(blob, filename) {
@@ -61,6 +63,8 @@ function App() {
       .catch((e) => console.error(e));
   }
 
+  // render elements on website
+
   return (
     <div
       style={{
@@ -86,12 +90,29 @@ function App() {
         setImageInput={setImageInput}
         setImageOutput={setImageOutput}
       />
+      <br />
       {/* Dispyay meme */}
       <img src={stringOutput} alt="meme" css={imageStyle} />
       <br />
       <button onClick={() => downloadResource(stringOutput, 'MyMeme.jpeg')}>
         Download meme
       </button>
+      {/* WORK IN PROGRESS: button to add search terms to history */}
+      {/* <br />
+      <button
+        onClick={() => {
+          topTextHistory.push(topTextOutput);
+        }}
+      >
+        Add to history
+      </button>
+      <div>
+        <ul>
+          {topTextHistory.map((item) => {
+            return <li key={topTextHistory[item]}>{item}</li>;
+          })}
+        </ul>
+      </div> */}
     </div>
   );
 }
